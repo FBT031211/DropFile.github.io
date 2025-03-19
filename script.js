@@ -1,43 +1,87 @@
-const GITHUB_USERNAME = "FBT031211";  // Ganti dengan username GitHub kamu
-const REPO_NAME = "dropfile.github.io"; // Nama repository GitHub
-const TOKEN = "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"; // Ganti dengan token GitHub yang valid
-
-document.getElementById("uploadBtn").addEventListener("click", async function () {
+document.addEventListener("DOMContentLoaded", function () {
     const fileInput = document.getElementById("fileInput");
-    const statusMessage = document.getElementById("statusMessage");
+    const fileList = document.getElementById("fileList");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+    const sendEmailBtn = document.getElementById("sendEmailBtn");
 
-    if (fileInput.files.length === 0) {
-        statusMessage.innerText = "Pilih file terlebih dahulu!";
-        return;
+    let selectedFiles = [];
+
+    // Menampilkan daftar file yang dipilih
+    fileInput.addEventListener("change", function () {
+        selectedFiles = Array.from(fileInput.files);
+        updateFileList();
+    });
+
+    function updateFileList() {
+        fileList.innerHTML = "";
+        if (selectedFiles.length === 0) {
+            clearAllBtn.style.display = "none";
+            return;
+        }
+
+        clearAllBtn.style.display = "block";
+
+        selectedFiles.forEach((file, index) => {
+            const fileItem = document.createElement("div");
+            fileItem.classList.add("file-item");
+
+            const fileName = document.createElement("span");
+            fileName.classList.add("file-name");
+            fileName.textContent = file.name;
+
+            const fileSize = document.createElement("span");
+            fileSize.classList.add("file-size");
+            fileSize.textContent = `(${(file.size / 1024).toFixed(2)} KB)`;
+
+            const removeBtn = document.createElement("button");
+            removeBtn.classList.add("remove-btn");
+            removeBtn.textContent = "❌";
+            removeBtn.addEventListener("click", () => removeFile(index));
+
+            fileItem.appendChild(fileName);
+            fileItem.appendChild(fileSize);
+            fileItem.appendChild(removeBtn);
+
+            fileList.appendChild(fileItem);
+        });
     }
 
-    const file = fileInput.files[0];
-    const reader = new FileReader();
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        updateFileList();
+    }
 
-    reader.onload = async function (event) {
-        const fileContent = btoa(event.target.result); // Encode file ke base64
-        const filePath = `uploads/${file.name}`; // Lokasi penyimpanan di repo
+    clearAllBtn.addEventListener("click", function () {
+        selectedFiles = [];
+        updateFileList();
+    });
 
-        const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${filePath}`;
-        
-        const response = await fetch(apiUrl, {
-            method: "PUT",
-            headers: {
-                "Authorization": `token ${TOKEN}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: `Upload ${file.name}`,
-                content: fileContent
-            })
+    // Kirim file melalui EmailJS
+    sendEmailBtn.addEventListener("click", function () {
+        if (selectedFiles.length === 0) {
+            alert("Pilih setidaknya satu file untuk dikirim.");
+            return;
+        }
+
+        const formData = new FormData();
+        selectedFiles.forEach((file, index) => {
+            formData.append(`file${index}`, file);
         });
 
-        if (response.ok) {
-            statusMessage.innerText = `✅ Berhasil diunggah: ${file.name}`;
-        } else {
-            statusMessage.innerText = `❌ Gagal mengunggah file`;
-        }
-    };
-
-    reader.readAsBinaryString(file);
+        emailjs.send("service_dh4r62t", "template_g1yf9nm", {
+            to_email: "fbt031211@gmail.com",
+            message: "File yang telah diunggah",
+        }).then(
+            function (response) {
+                alert("File berhasil dikirim!");
+                console.log("SUCCESS!", response.status, response.text);
+                selectedFiles = [];
+                updateFileList();
+            },
+            function (error) {
+                alert("Gagal mengirim file.");
+                console.error("FAILED...", error);
+            }
+        );
+    });
 });

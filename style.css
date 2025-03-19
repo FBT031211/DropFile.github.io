@@ -1,30 +1,119 @@
-body {
+/* Tema gelap & full-screen */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #181818;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Kotak upload */
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-box {
+    background: #282828;
+    padding: 30px;
+    border-radius: 10px;
     text-align: center;
-    background-color: #121212;
-    color: white;
+    width: 400px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
 }
 
-.container {
-    margin-top: 50px;
-    padding: 20px;
-    background-color: #1e1e1e;
-    border-radius: 8px;
-    display: inline-block;
+.upload-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
 }
 
-input {
-    margin: 10px;
+.subtext {
+    font-size: 14px;
+    color: #b3b3b3;
+    margin-bottom: 20px;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
+/* Tombol Pilih File */
+.upload-btn, .clear-btn {
+    background-color: #ffffff;
+    color: #000;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.upload-btn:hover {
+    background-color: #cccccc;
+}
+
+.clear-btn {
+    background-color: #ff4444;
+    color: white;
+}
+
+.clear-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Daftar file */
+#fileList {
+    margin-top: 15px;
+    max-height: 150px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    background: #333;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+}
+
+.file-item.fade-out {
+    opacity: 0;
+}
+
+.file-name {
+    flex-grow: 1;
+    font-size: 14px;
+    color: #ddd;
+}
+
+.file-size {
+    font-size: 12px;
+    color: #888;
+    margin-left: 10px;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #ff5555;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.remove-btn:hover {
+    color: #ff0000;
 }

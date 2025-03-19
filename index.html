@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload File ke GitHub</title>
+    <title>Upload File</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Upload File ke GitHub</h2>
-        <input type="file" id="fileInput">
-        <button id="uploadBtn">Upload</button>
-        <p id="statusMessage"></p>
+    <div class="upload-container">
+        <div class="upload-box">
+            <div class="upload-icon">⬆️</div>
+            <p>Tarik lalu lepas file yang ingin diunggah</p>
+            <p class="subtext">File Anda akan bersifat pribadi sampai Anda mempublikasikannya.</p>
+            <input type="file" id="fileInput" multiple hidden>
+            <button onclick="document.getElementById('fileInput').click()" class="upload-btn">Pilih File</button>
+            <div id="fileList"></div>
+            <button id="clearAllBtn" class="clear-btn" style="display: none;" onclick="clearAllFiles()">Hapus Semua</button>
+            <button id="sendEmailBtn" class="upload-btn">Kirim File</button>
+        </div>
     </div>
+<!-- EmailJS Script -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        emailjs.init("4hDGuDN83ZtEgwq28"); // Ganti dengan User ID kamu
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
